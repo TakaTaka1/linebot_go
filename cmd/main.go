@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/aws/aws-lambda-go/lambda"
+	_"github.com/aws/aws-lambda-go/lambda"
 	"github.com/joho/godotenv"
 )
 
@@ -69,6 +69,7 @@ func LineNotify () {
 }
 
 func main() {
+	// LineNotify()
 	// f := "./.env"
 	// if _, err := os.Stat(f); err == nil {
 	// 	err_read := godotenv.Load(f)
@@ -112,7 +113,7 @@ func main() {
 	// 	log.Fatal(err)
 	// }
 	// fmt.Println(res)
-
+	
 	log.Printf("lambda started!")
 	// lambda.Start(HandleRequest)
 	lambda.Start(LineNotify)
