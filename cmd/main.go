@@ -115,5 +115,5 @@ func main() {
 
 	log.Printf("lambda started!")
 	// lambda.Start(HandleRequest)
-	lambda.Start(LineNotify())
+	lambda.Start(LineNotify)
 }
