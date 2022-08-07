@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	_"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/joho/godotenv"
 )
 
