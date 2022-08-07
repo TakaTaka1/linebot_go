@@ -23,10 +23,16 @@ func HandleRequest(ctx context.Context, name MyEvent) (string, error) {
 }
 
 func main() {
-    err := godotenv.Load()
-    if err != nil {
-        log.Fatal("Error loading .env file")
-    }
+	f := "./.env"
+	if _, err := os.Stat(f); err == nil {
+		err_read := godotenv.Load(f)
+		if err_read != nil {
+			log.Fatalf("error: %v", err_read)
+		}
+		fmt.Println(".env is existed")
+	} else {
+		fmt.Println(".env is not existed")
+	}	
 
 	accessToken := os.Getenv("LINE_ACCESS_TOKEN_TEST")
 	msg := "テストメッセージ"	
