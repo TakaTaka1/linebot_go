@@ -9,11 +9,13 @@ install2 :
 install3 :
 	go install github.com/kisielk/errcheck@latest
 
-PREP : format verify errcheck
+PREP : importscheck verify errcheck
 
-format:
+fmt :
+	
+importscheck :
 	@find . -print | grep --regex '.*\.go' | xargs goimports -w -local "github.com/TakaTaka1/linebot_go"
-verify:
+verify :
 	@staticcheck ./... && go vet ./...
 errcheck :
 	@errcheck ./...
