@@ -10,8 +10,6 @@ install3 :
 	go install github.com/kisielk/errcheck@latest
 
 PREP : importscheck verify errcheck
-
-fmt :
 	
 importscheck :
 	@find . -print | grep --regex '.*\.go' | xargs goimports -w -local "github.com/TakaTaka1/linebot_go"

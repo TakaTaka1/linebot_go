@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -19,25 +20,27 @@ type MyEvent struct {
 
 func HandleRequest(ctx context.Context, name MyEvent) (string, error) {
 	log.Printf("lambda finished! response will be returned!")
+
 	return fmt.Sprintf("Hello %s!", name.Name), nil
 }
 
 func main() {
 	f := "./.env"
-	if _, err := os.Stat(f); err == nil {
-		err_read := godotenv.Load(f)
-		if err_read != nil {
-			log.Fatalf("error: %v", err_read)
-		}
-		fmt.Println(".env is existed")
-	} else {
-		fmt.Println(".env is not existed")
+	err_read := godotenv.Load(f)
+	if err_read != nil {
+		log.Fatalf("error: %v", err_read)
+	}
+	host, _ := os.Hostname()
+	matchedLocal, _ := regexp.Match(`local`, []byte(host))
+
+	var accessToken string
+	accessToken = os.Getenv("LINE_ACCESS_TOKEN_TEST")
+	if !matchedLocal {
+		accessToken = os.Getenv("LINE_ACCESS_TOKEN")
 	}
 
-	accessToken := os.Getenv("LINE_ACCESS_TOKEN_TEST")
 	msg := "テストメッセージ"
 	URL := "https://notify-api.line.me/api/notify"
-
 	u, err := url.ParseRequestURI(URL)
 	if err != nil {
 		fmt.Println("send error")
