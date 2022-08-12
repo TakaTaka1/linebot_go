@@ -56,6 +56,9 @@ func main() {
 	// ゴミの日のポストメッセージ
 	// ゴミ出し日の前日9pmと当日の7:30amにポストする
 	// TODO 曜日判定メソッドのリファクタリング
+	// arrayのindex[Sunday-Saturday]ごとにメッセージ入れて、indexの指定で対象のメッセージを返すようにする
+	// weekday[Sunday] = "Sunday" => return weekday[Sunday]
+	// 他にも必要なメッセージは条件によって追加する
 	const (
 		Sunday    = 0
 		Monday    = 1
