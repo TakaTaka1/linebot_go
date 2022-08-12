@@ -7,7 +7,6 @@ RUN mkdir ${ROOT}
 WORKDIR ${ROOT}
 
 COPY go.mod ./
-#COPY go.sum ./
 
 RUN go mod download
 
