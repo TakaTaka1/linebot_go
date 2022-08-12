@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/joho/godotenv"
 )
 
 func GetWeekNumber(year, month, day int) int {
@@ -33,11 +34,17 @@ func HandleRequest(ctx context.Context, name MyEvent) (string, error) {
 }
 
 func main() {
-	// f := "./.env"
-	// err_read := godotenv.Load(f)
-	// if err_read != nil {
-	// 	log.Fatalf("error: %v", err_read)
-	// }
+	f := "./.env"
+	if _, err := os.Stat(f); err == nil {
+		err_read := godotenv.Load(f)
+		if err_read != nil {
+			log.Fatalf("error: %v", err_read)
+		}
+		fmt.Println(".env is existed")
+		// 存在します
+	} else {
+		fmt.Println(".env is not existed")
+	}
 	host, _ := os.Hostname()
 	matchedLocal, _ := regexp.Match(`local`, []byte(host))
 
