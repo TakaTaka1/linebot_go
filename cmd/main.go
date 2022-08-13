@@ -16,6 +16,15 @@ import (
 	"github.com/joho/godotenv"
 )
 
+func init() {
+	// jst, err := time.LoadLocation("Asia/Tokyo")
+	// if err != nil {
+	// 	fmt.Println("Error load location")
+	// 	os.Exit(1)
+	// }
+	// time.Local = jst
+}
+
 func GetWeekNumber(year, month, day int) int {
 	CurrentDate := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.Local)
 	weekNum := float64(CurrentDate.Day()) / 7
@@ -72,15 +81,24 @@ func main() {
 		Shigen    = "♻️資源ゴミ️️️️️️♻️"
 	)
 
-	today := time.Now()          // 現在日時の取得
-	DayOfWeek := today.Weekday() // 曜日の取得
+	jst, err := time.LoadLocation("Asia/Tokyo")
+	if err != nil {
+		fmt.Println("Error load location")
+		os.Exit(1)
+	}
+	fmt.Printf("UTC?? : %v\n", time.Now())
+	todayJST := time.Now().In(jst) // 現在日時の取得
+	fmt.Printf("now: %v\n", todayJST.Format(time.RFC3339))
+	DayOfWeek := todayJST.Weekday() // 曜日の取得
 	msg := ""
+
+	fmt.Printf("JST : %v\n", todayJST)
 
 	if DayOfWeek == Tuesday {
 		// 可燃
 		msg += "\n明日は" + Kanen + "収集日です。"
 	}
-	wN := GetWeekNumber(today.Year(), int(today.Month()), today.Day())
+	wN := GetWeekNumber(todayJST.Year(), int(todayJST.Month()), todayJST.Day())
 
 	if DayOfWeek == Wednesday {
 		msg += "\n今日は" + Kanen + "収集日です。"
