@@ -143,7 +143,7 @@ func main() {
 	if msg == "" {
 		os.Exit(0)
 	}
-	form.Add("message", msg)
+	form.Add("message", "\n"+msg)
 
 	body := strings.NewReader(form.Encode())
 
