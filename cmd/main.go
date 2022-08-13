@@ -109,6 +109,15 @@ func main() {
 		msg += "\n今日は" + Kanen + "収集日です。"
 	}
 
+	if DayOfWeek == Saturday {
+		// 資源・可燃ゴミ
+		msg += "\n今日は" + Kanen + "収集日です。"
+	}
+
+	if DayOfWeek == Sunday {
+		msg += "\n今日は日曜日なのでごみ収集はありません。"
+	}
+
 	URL := "https://notify-api.line.me/api/notify"
 	u, err := url.ParseRequestURI(URL)
 	if err != nil {
