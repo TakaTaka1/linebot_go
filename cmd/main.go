@@ -86,8 +86,8 @@ func main() {
 		fmt.Println("Error load location")
 		os.Exit(1)
 	}
-	fmt.Printf("UTC?? : %v\n", time.Now())
-	todayJST := time.Now().In(jst) // 現在日時の取得
+
+	todayJST := time.Now().In(jst) // lambdaはUTCなのでjstに変換する
 	fmt.Printf("now: %v\n", todayJST.Format(time.RFC3339))
 	DayOfWeek := todayJST.Weekday() // 曜日の取得
 	msg := ""
