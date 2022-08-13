@@ -12,18 +12,10 @@ import (
 	"strings"
 	"time"
 
+	week "github.com/TakaTaka1/linebot_go/internal"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/joho/godotenv"
 )
-
-func init() {
-	// jst, err := time.LoadLocation("Asia/Tokyo")
-	// if err != nil {
-	// 	fmt.Println("Error load location")
-	// 	os.Exit(1)
-	// }
-	// time.Local = jst
-}
 
 func GetWeekNumber(year, month, day int) int {
 	CurrentDate := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.Local)
@@ -43,6 +35,7 @@ func HandleRequest(ctx context.Context, name MyEvent) (string, error) {
 }
 
 func main() {
+	week.Test()
 	f := "./.env"
 	if _, err := os.Stat(f); err == nil {
 		err_read := godotenv.Load(f)
@@ -88,48 +81,54 @@ func main() {
 	}
 
 	todayJST := time.Now().In(jst) // lambdaはUTCなのでjstに変換する
-	fmt.Printf("now: %v\n", todayJST.Format(time.RFC3339))
+
 	DayOfWeek := todayJST.Weekday() // 曜日の取得
 	msg := ""
 
-	fmt.Printf("JST : %v\n", todayJST)
+	sDb := week.SelectDayBefore(DayOfWeek)
+	sT := week.SelectToday(DayOfWeek)
 
-	if DayOfWeek == Tuesday {
-		// 可燃
-		msg += "\n明日は" + Kanen + "収集日です。"
-	}
-	wN := GetWeekNumber(todayJST.Year(), int(todayJST.Month()), todayJST.Day())
+	d, t := week.CreateMessageForDate(sDb, sT)
 
-	if DayOfWeek == Wednesday {
-		msg += "\n今日は" + Kanen + "収集日です。"
-		if wN == 1 || wN == 3 {
-			msg += "\n明日は" + Funen + "収集日です。"
-		}
-	}
+	msg = week.MergeMessage(d, t)
+	fmt.Println("test date: " + msg)
 
-	if DayOfWeek == Thursday && (wN == 1 || wN == 3) {
-		msg += "\n今日は" + Funen + "収集日です。"
-	}
+	// if DayOfWeek == Tuesday {
+	// 	// 可燃
+	// 	msg += "\n明日は" + Kanen + "収集日です。"
+	// }
+	// wN := GetWeekNumber(todayJST.Year(), int(todayJST.Month()), todayJST.Day())
 
-	if DayOfWeek == Thursday {
-		// 資源
-		msg += "\n明日は" + Shigen + "収集日です。"
-	}
+	// if DayOfWeek == Wednesday {
+	// 	msg += "\n今日は" + Kanen + "収集日です。"
+	// 	if wN == 1 || wN == 3 {
+	// 		msg += "\n明日は" + Funen + "収集日です。"
+	// 	}
+	// }
 
-	if DayOfWeek == Friday {
-		// 資源・可燃ゴミ
-		msg += "\n今日は" + Shigen + "収集日です。"
-		msg += "\n明日は" + Kanen + "収集日です。"
-	}
+	// if DayOfWeek == Thursday && (wN == 1 || wN == 3) {
+	// 	msg += "\n今日は" + Funen + "収集日です。"
+	// }
 
-	if DayOfWeek == Saturday {
-		// 資源・可燃ゴミ
-		msg += "\n今日は" + Kanen + "収集日です。"
-	}
+	// if DayOfWeek == Thursday {
+	// 	// 資源
+	// 	msg += "\n明日は" + Shigen + "収集日です。"
+	// }
 
-	if DayOfWeek == Sunday {
-		msg += "\n今日は日曜日なのでごみ収集はありません。"
-	}
+	// if DayOfWeek == Friday {
+	// 	// 資源・可燃ゴミ
+	// 	msg += "\n今日は" + Shigen + "収集日です。"
+	// 	msg += "\n明日は" + Kanen + "収集日です。"
+	// }
+
+	// if DayOfWeek == Saturday {
+	// 	// 資源・可燃ゴミ
+	// 	msg += "\n今日は" + Kanen + "収集日です。"
+	// }
+
+	// if DayOfWeek == Sunday {
+	// 	msg += "\n今日は日曜日なのでごみ収集はありません。"
+	// }
 
 	URL := "https://notify-api.line.me/api/notify"
 	u, err := url.ParseRequestURI(URL)
