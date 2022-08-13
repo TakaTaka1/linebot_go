@@ -35,7 +35,6 @@ func HandleRequest(ctx context.Context, name MyEvent) (string, error) {
 }
 
 func main() {
-	week.Test()
 	f := "./.env"
 	if _, err := os.Stat(f); err == nil {
 		err_read := godotenv.Load(f)
