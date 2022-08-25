@@ -35,7 +35,7 @@ func HandleRequest(ctx context.Context, name MyEvent) (string, error) {
 }
 
 func main() {
-	f := "./.env"
+	f := "../.env"
 	if _, err := os.Stat(f); err == nil {
 		err_read := godotenv.Load(f)
 		if err_read != nil {
@@ -64,8 +64,12 @@ func main() {
 	todayJST := time.Now().In(jst)  // lambdaはUTCなのでjstに変換する
 	DayOfWeek := todayJST.Weekday() // 曜日の取得
 	msg := ""
+	sT := ""
+	fmt.Println(todayJST.Hour())
 	sDb := week.SelectDayBefore(DayOfWeek)
-	sT := week.SelectToday(DayOfWeek)
+	if todayJST.Hour() < 21 {
+		sT = week.SelectToday(DayOfWeek)
+	}
 	d, t := week.CreateMessageForDate(sDb, sT)
 	msg = week.MergeMessage(d, t)
 
