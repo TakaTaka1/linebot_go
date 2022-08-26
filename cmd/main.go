@@ -65,12 +65,13 @@ func main() {
 	DayOfWeek := todayJST.Weekday() // 曜日の取得
 	msg := ""
 	sT := ""
-	fmt.Println(todayJST.Hour())
+	// fmt.Println(todayJST.Hour())
 	sDb := week.SelectDayBefore(DayOfWeek)
 	if todayJST.Hour() < 21 {
 		sT = week.SelectToday(DayOfWeek)
 	}
 	d, t := week.CreateMessageForDate(sDb, sT)
+	// fmt.Println(d, t)
 	msg = week.MergeMessage(d, t)
 
 	URL := "https://notify-api.line.me/api/notify"

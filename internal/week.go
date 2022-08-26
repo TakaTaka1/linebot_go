@@ -1,6 +1,7 @@
 package week
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -47,16 +48,17 @@ func CreateMessageForDate(d string, t string) (string, string) {
 }
 
 func MergeMessage(dMessage string, tMessage string) string {
-	retMessage := ""
-	if dMessage != "" && tMessage != "" {
-		retMessage = dMessage + "\n" + tMessage
-	}
+	var retMessage string = ""
 	if dMessage != "" {
 		retMessage = dMessage
 	}
-	if tMessage != "" {
+	if tMessage != "" && dMessage == "" {
 		retMessage = tMessage
 	}
 
+	if tMessage != "" && dMessage != "" {
+		retMessage += "\n" + tMessage
+	}
+	fmt.Println(retMessage)
 	return retMessage
 }
